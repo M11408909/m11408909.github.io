@@ -338,29 +338,6 @@
             font-weight: 600;
         }
 
-        .upload-time {
-            font-size: 0.85rem;
-            color: #2d3748; /* 加深顏色以提高可見度 */
-            font-weight: 500;
-            margin-top: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .upload-time i {
-            font-size: 0.9rem;
-            color: #3a6293;
-        }
-
-        #modalUploadTime {
-            color: #2d3748;
-            font-size: 0.95rem;
-            font-weight: 500;
-            margin-top: -10px;
-            margin-bottom: 20px;
-        }
-
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .unit-nav-container {
@@ -514,7 +491,6 @@
                 </div>
                 <div class="modal-body text-center">
                     <img id="modalImage" src="" alt="專案圖片" class="img-fluid rounded mb-3">
-                    <div id="modalUploadTime" class="upload-time justify-content-center"></div>
                     <p id="imageDescription" class="mt-2"></p>
                 </div>
             </div>
@@ -548,15 +524,9 @@
                 galleryGrid.innerHTML = '<div class="text-center text-white py-5"><i class="fas fa-spinner fa-spin me-2"></i>偵測圖片中...</div>';
             }
 
-            // Generate images for this unit (動態偵測有幾張圖), then load metadata & render
+            // Generate images for this unit (動態偵測有幾張圖), then render
             generateImages().then(() => {
-                loadMetadata().then(() => {
-                    // Render gallery
-                    renderGallery();
-
-                    // Fetch dates after elements are in DOM (fallback)
-                    images.forEach((img, idx) => fetchImageDate(img, idx));
-                });
+                renderGallery();
             });
 
             // Update navigation
@@ -565,26 +535,6 @@
             initScrollAnimations();
             initKeyboardNavigation();
         });
-
-        let imageMetadata = {};
-
-        function loadMetadata() {
-            // 嘗試載入由 Python 腳本產生的資料檔案
-            return fetch('../image_metadata.json')
-                .then(res => res.json())
-                .then(data => { 
-                    imageMetadata = data; 
-                    console.log("已從 JSON 載入 MetaData");
-                })
-                .catch(err => {
-                    console.warn("未能在上層目錄找到 image_metadata.json，試圖在本地目錄尋找...");
-                    return fetch('image_metadata.json')
-                        .then(res => res.json())
-                        .then(data => { imageMetadata = data; })
-                        .catch(() => console.warn("找不到 Metadata JSON，將採回 HEAD 請求方式。"));
-                });
-        }
-
 
         // Unit information with names and attributes
         const unitInfo = {
@@ -727,8 +677,7 @@
                 images.push({
                     src: src,
                     title: `${unit.name} - 圖片 ${i}`,
-                    description: `單元 #${currentUnit}: ${unit.name} 作業圖片 ${i}`,
-                    lastModified: '讀取中...'
+                    description: `單元 #${currentUnit}: ${unit.name} 作業圖片 ${i}`
                 });
                 i++;
             }
@@ -738,51 +687,8 @@
                 images.push({
                     src: 'pic/no.jpg',
                     title: `${unit.name} - 尚無圖片`,
-                    description: `單元 #${currentUnit}: ${unit.name} 目前尚未上傳作業圖片`,
-                    lastModified: '未知'
+                    description: `單元 #${currentUnit}: ${unit.name} 目前尚未上傳作業圖片`
                 });
-            }
-        }
-
-        // 獲取圖片檔案最後修改時間
-        function fetchImageDate(imageData, index) {
-            const fileName = imageData.src.split('/').pop();
-            
-            // 優先從 JSON 中提取時間（對應使用者要求的 Last Commit Date）
-            if (imageMetadata[fileName]) {
-                console.log(`從 JSON 匹配到 ${fileName} 的日期`);
-                imageData.lastModified = imageMetadata[fileName];
-                updateDateUI(index, imageData.lastModified);
-                return;
-            }
-
-            // 如果 JSON 沒找到，才嘗試 HEAD 請求
-            fetch(imageData.src, { method: 'HEAD' })
-                .then(response => {
-                    const lastModified = response.headers.get('Last-Modified');
-                    if (lastModified) {
-                        const date = new Date(lastModified);
-                        imageData.lastModified = date.toLocaleString('zh-TW', {
-                            year: 'numeric', month: '2-digit', day: '2-digit',
-                            hour: '2-digit', minute: '2-digit', second: '2-digit', 
-                            hour12: false
-                        });
-                    } else {
-                        imageData.lastModified = '未知';
-                    }
-                    updateDateUI(index, imageData.lastModified);
-                })
-                .catch(() => {
-                    imageData.lastModified = '未知';
-                    updateDateUI(index, imageData.lastModified);
-                });
-        }
-
-        // 獨立更新 UI 的函數
-        function updateDateUI(index, timeStr) {
-            const dateEl = document.getElementById(`upload-time-${index}`);
-            if (dateEl) {
-                dateEl.innerHTML = `<i class="far fa-clock"></i> 最後提交: ${timeStr}`;
             }
         }
 
@@ -801,9 +707,6 @@
                         <div class="gallery-overlay">
                             <h5>${fileName}</h5>
                             <p>${unit.name}</p>
-                            <div class="upload-time" id="upload-time-${index}">
-                                <i class="far fa-clock"></i> 最後提交: ${image.lastModified}
-                            </div>
                         </div>
                     </div>
                 `;
@@ -815,11 +718,9 @@
             const image = images[index];
             const modalImage = document.getElementById('modalImage');
             const imageDescription = document.getElementById('imageDescription');
-            const modalUploadTime = document.getElementById('modalUploadTime');
 
             modalImage.src = image.src;
             imageDescription.textContent = image.description;
-            modalUploadTime.innerHTML = `<i class="far fa-clock"></i> 最後提交: ${image.lastModified}`;
         }
 
         // Scroll animations
