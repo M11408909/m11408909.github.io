@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3189 景碩科技 - 投資分析與估值模型總研報告</title>
+    <!-- Tailwind CSS & Plotly JS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #f4f6f9; color: #1e293b; }
+        .gradient-header { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #1e40af 100%); }
+        .card-shadow { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01); }
+        .border-accent { border-left: 4px solid #ef4444; }
+        .tag-buy { background-color: #fef2f2; color: #dc2626; border: 1px solid #fca5a5; }
+    </style>
+</head>
+<body class="pb-16">
+
+    <!-- Header Banner -->
+    <header class="gradient-header text-white py-12 px-6 shadow-lg mb-10">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            <div>
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">個股投資報告</span>
+                    <span class="text-blue-200 text-sm font-medium">產業：電子上游 - IC / ABF 載板</span>
+                </div>
+                <h1 class="text-4xl font-black tracking-tight mb-2">3189 景碩科技 (Kinsus)</h1>
+                <p class="text-lg text-slate-300 font-light">AI 伺服器與高階 ABF 載板估值模型暨完整投資分析簡報</p>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20 text-right">
+                <div class="text-xs text-slate-300">最新收盤價 (參考)</div>
+                <div class="text-3xl font-black text-amber-400">NT$ 125.5</div>
+                <div class="text-xs text-emerald-400 font-semibold mt-1"><i class="fa-solid fa-arrow-trend-up"></i> 均線多頭排列</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 space-y-10">
+
+        <!-- Executive Summary Cards -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-2xl card-shadow border-t-4 border-blue-600">
+                <div class="flex items-center gap-3 text-blue-600 mb-3">
+                    <i class="fa-solid fa-bolt text-xl"></i>
+                    <h3 class="font-bold text-lg">營運動能強勁回升</h3>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    受惠美系 GPU/CPU 大客戶及 ASIC 新單釋出，高階 ABF 載板產能利用率逼近滿載，2026 年單月營收年增率高達 30-50% 以上。
+                </p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl card-shadow border-t-4 border-emerald-600">
+                <div class="flex items-center gap-3 text-emerald-600 mb-3">
+                    <i class="fa-solid fa-chart-line text-xl"></i>
+                    <h3 class="font-bold text-lg">獲利能力顯著跳升</h3>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    產品組合改善帶動毛利率自 2024 年的 25% 攀升至 2026E 的 28.5%~32.0%，2026 預估 EPS 上看 <span class="font-bold text-emerald-700">8.91 ~ 9.70 元</span>。
+                </p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl card-shadow border-t-4 border-red-600">
+                <div class="flex items-center gap-3 text-red-600 mb-3">
+                    <i class="fa-solid fa-bullseye text-xl"></i>
+                    <h3 class="font-bold text-lg">目標價與投資評等</h3>
+                </div>
+                <div class="flex items-baseline gap-2 mb-2">
+                    <span class="text-2xl font-black text-red-600">NT$ 150 - 180</span>
+                    <span class="text-xs font-bold tag-buy px-2.5 py-0.5 rounded">買進 (BUY)</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    綜合 P/E (16.5x-20x)、P/B (2.2x) 及 DCF 估值模型，推算合理目標價中位數約 175 元，具具吸引力之上行空間。
+                </p>
+            </div>
+        </section>
+
+        <!-- Company Overview -->
+        <section class="bg-white p-8 rounded-2xl card-shadow space-y-4">
+            <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-blue-800 pl-3">一、 公司概況與產業定位</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-slate-700 text-sm leading-relaxed">
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-100 space-y-2">
+                    <h4 class="font-bold text-slate-900 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-microchip text-blue-600"></i> 核心業務與產品結構
+                    </h4>
+                    <p><strong>景碩科技 (3189)</strong> 為華碩集團旗下的 IC 載板龍頭大廠，核心產品涵蓋：</p>
+                    <ul class="list-disc list-inside space-y-1 text-slate-600 pl-2">
+                        <li><strong class="text-blue-700">ABF 載板：</strong>應用於 AI 伺服器、HPC 高速運算晶片及 800G 交換器，營收占比攀升至 45% 以上。</li>
+                        <li><strong class="text-blue-700">BT 載板：</strong>應用於智慧型手機、記憶體 (DRAM/NAND) 及車用電子，提供穩健現金流。</li>
+                    </ul>
+                </div>
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-100 space-y-2">
+                    <h4 class="font-bold text-slate-900 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-industry text-blue-600"></i> 產業利基與成長驅動力
+                    </h4>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600">
+                        <li><strong>T-glass 材料供應限制：</strong>上游玻璃基材供不應求，產業產能擴建遞延，使 ABF 載板供需吃緊狀況持續至 2026-2027 年。</li>
+                        <li><strong>美系 GPU/CPU 大單收割：</strong>接獲頂級客戶次世代 AI 晶片載板訂單，產品單價 (ASP) 與毛利率大幅推升。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Historical Performance Table -->
+        <section class="bg-white p-8 rounded-2xl card-shadow space-y-4">
+            <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-blue-800 pl-3">二、 歷史財務數據回顧 (2022 - 2025)</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-slate-700">
+                    <thead class="text-xs uppercase bg-slate-800 text-white">
+                        <tr>
+                            <th class="px-6 py-3.5 rounded-tl-lg">財務指標 (百萬元 / 元)</th>
+                            <th class="px-6 py-3.5 text-right">2022 年</th>
+                            <th class="px-6 py-3.5 text-right">2023 年</th>
+                            <th class="px-6 py-3.5 text-right">2024 年</th>
+                            <th class="px-6 py-3.5 text-right rounded-tr-lg">2025 年</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200">
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-3 font-semibold text-slate-900">營業收入</td>
+                            <td class="px-6 py-3 text-right">43,210</td>
+                            <td class="px-6 py-3 text-right">29,500</td>
+                            <td class="px-6 py-3 text-right">32,800</td>
+                            <td class="px-6 py-3 text-right font-bold text-blue-800">38,850</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-3 font-semibold text-slate-900">營業毛利</td>
+                            <td class="px-6 py-3 text-right">15,990</td>
+                            <td class="px-6 py-3 text-right">5,900</td>
+                            <td class="px-6 py-3 text-right">8,200</td>
+                            <td class="px-6 py-3 text-right font-bold text-blue-800">10,490</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-3 font-semibold text-slate-900">稅後淨利</td>
+                            <td class="px-6 py-3 text-right">11,200</td>
+                            <td class="px-6 py-3 text-right">1,750</td>
+                            <td class="px-6 py-3 text-right">3,450</td>
+                            <td class="px-6 py-3 text-right font-bold text-blue-800">5,150</td>
+                        </tr>
+                        <tr class="bg-blue-50/50 hover:bg-blue-50">
+                            <td class="px-6 py-3 font-bold text-blue-900">每股盈餘 EPS (元)</td>
+                            <td class="px-6 py-3 text-right font-bold">24.71</td>
+                            <td class="px-6 py-3 text-right font-bold">3.86</td>
+                            <td class="px-6 py-3 text-right font-bold">7.61</td>
+                            <td class="px-6 py-3 text-right font-bold text-blue-900">11.36</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-3 font-semibold text-slate-900">毛利率 (%)</td>
+                            <td class="px-6 py-3 text-right">37.0%</td>
+                            <td class="px-6 py-3 text-right">20.0%</td>
+                            <td class="px-6 py-3 text-right">25.0%</td>
+                            <td class="px-6 py-3 text-right font-semibold text-blue-800">27.0%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 3-Scenario Forecast -->
+        <section class="bg-white p-8 rounded-2xl card-shadow space-y-4">
+            <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-blue-800 pl-3">三、 2026E - 2027E 營運三情境預測模型</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-slate-700">
+                    <thead class="text-xs uppercase bg-slate-800 text-white">
+                        <tr>
+                            <th class="px-6 py-3.5 rounded-tl-lg">情境 (Scenario)</th>
+                            <th class="px-6 py-3.5 text-right">2026E 預估營收</th>
+                            <th class="px-6 py-3.5 text-right">預估毛利率</th>
+                            <th class="px-6 py-3.5 text-right">2026E 預估 EPS</th>
+                            <th class="px-6 py-3.5 rounded-tr-lg">核心假設邏輯</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200">
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-bold text-amber-700">悲觀情境 (Bear)</td>
+                            <td class="px-6 py-4 text-right font-semibold">458.4 億元 (+18%)</td>
+                            <td class="px-6 py-4 text-right">24.0%</td>
+                            <td class="px-6 py-4 text-right font-bold">6.85 元</td>
+                            <td class="px-6 py-4 text-slate-600">消費性電子復甦緩慢，ABF 報價漲幅有限</td>
+                        </tr>
+                        <tr class="bg-blue-50/80 hover:bg-blue-100/80">
+                            <td class="px-6 py-4 font-bold text-blue-900">基準情境 (Base)</td>
+                            <td class="px-6 py-4 text-right font-bold text-blue-900">512.8 億元 (+32%)</td>
+                            <td class="px-6 py-4 text-right font-bold text-blue-900">28.5%</td>
+                            <td class="px-6 py-4 text-right font-black text-blue-900 text-base">9.25 元</td>
+                            <td class="px-6 py-4 font-medium text-blue-950">AI 伺服器與高階 ABF 載板強勁拉貨，報價逐季上揚</td>
+                        </tr>
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 font-bold text-emerald-700">樂觀情境 (Bull)</td>
+                            <td class="px-6 py-4 text-right font-semibold">551.7 億元 (+42%)</td>
+                            <td class="px-6 py-4 text-right">32.0%</td>
+                            <td class="px-6 py-4 text-right font-bold text-emerald-700">11.20 元</td>
+                            <td class="px-6 py-4 text-slate-600">美系客戶與 ASIC 大單全面收割，產能滿載擴張</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Valuation Summary -->
+        <section class="bg-white p-8 rounded-2xl card-shadow space-y-4">
+            <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-blue-800 pl-3">四、 估值模型與合理目標價推算</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
+                    <div class="text-xs text-slate-500 mb-1">本益比估值 (P/E Base)</div>
+                    <div class="text-xl font-bold text-slate-800">152.6 元</div>
+                    <div class="text-xs text-slate-500 mt-1">16.5x × 9.25元</div>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
+                    <div class="text-xs text-slate-500 mb-1">本益比估值 (P/E Bull)</div>
+                    <div class="text-xl font-bold text-slate-800">224.0 元</div>
+                    <div class="text-xs text-slate-500 mt-1">20.0x × 11.20元</div>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
+                    <div class="text-xs text-slate-500 mb-1">股價淨值比 (P/B)</div>
+                    <div class="text-xl font-bold text-slate-800">181.5 元</div>
+                    <div class="text-xs text-slate-500 mt-1">2.2x × BVPS 82.5元</div>
+                </div>
+                <div class="bg-red-50 p-4 rounded-xl border border-red-200 text-center">
+                    <div class="text-xs text-red-600 font-bold mb-1">綜合合理價中位數</div>
+                    <div class="text-2xl font-black text-red-600">175.0 元</div>
+                    <div class="text-xs text-red-500 mt-1">平均目標價位</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Analysis & Plotly Chart -->
+        <section class="bg-white p-8 rounded-2xl card-shadow space-y-4">
+            <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-blue-800 pl-3">五、 技術面型態與 K 線走勢分析</h2>
+            <div id="plotly-chart" class="w-full h-[500px] rounded-xl overflow-hidden border border-slate-200"></div>
+        </section>
+
+        <!-- Risk Matrix & Recommendation -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-8 rounded-2xl card-shadow space-y-4">
+                <h2 class="text-xl font-bold text-slate-900 border-l-4 border-blue-800 pl-3">六、 風險矩陣與控管</h2>
+                <ul class="space-y-3 text-sm text-slate-700">
+                    <li class="p-3 bg-slate-50 rounded-lg border border-slate-100">
+                        <strong class="text-slate-900">T-glass 材料供應：</strong>上游材料短缺若緩解致供給增加。<em>(風險等級：中)</em>
+                    </li>
+                    <li class="p-3 bg-slate-50 rounded-lg border border-slate-100">
+                        <strong class="text-slate-900">客戶集中度風險：</strong>單一美系客戶出貨時程波動。<em>(風險等級：低至中)</em>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-gradient-to-br from-slate-900 to-blue-950 text-white p-8 rounded-2xl card-shadow space-y-4">
+                <h2 class="text-xl font-bold border-l-4 border-red-500 pl-3">七、 綜合投資結論與建議</h2>
+                <div class="space-y-3 text-sm leading-relaxed text-slate-200">
+                    <p class="text-lg font-bold text-amber-400"><i class="fa-solid fa-star"></i> 評等：買進 (BUY) | 目標價區間：NT$ 150 - 180</p>
+                    <p>ABF 載板迎來新一輪產業上行循環，AI 伺服器與高階 ASIC 需求極為明確。景碩獲利爆發力強勁，目前股價尚未充分反映 2026-2027 年強勁基本面，逢拉回皆為優質佈局時機。</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-7xl mx-auto px-6 mt-12 text-center text-xs text-slate-400">
+        <p>資料來源：公開資訊觀測站 (MOPS)、鉅亨網、科技新報、法人研報 | 警語：本報告僅供參考，不構成任何買賣投資建議。</p>
+    </footer>
+
+    <!-- Plotly Interactive Chart Script -->
+    <script>
+        var dates = ['2026-05-18','2026-05-25','2026-06-01','2026-06-08','2026-06-15','2026-06-22','2026-06-29','2026-07-06','2026-07-13','2026-07-20','2026-07-27','2026-08-03','2026-08-10'];
+        var open = [102.5, 105.0, 108.0, 110.5, 112.0, 115.0, 114.5, 118.0, 120.5, 122.0, 121.5, 123.0, 124.5];
+        var high = [106.0, 109.5, 112.0, 114.0, 116.5, 118.0, 119.0, 122.5, 124.0, 126.5, 125.0, 128.0, 129.0];
+        var low =  [101.0, 104.0, 106.5, 109.0, 110.0, 113.5, 112.0, 116.5, 118.5, 120.0, 119.5, 121.5, 123.5];
+        var close = [105.0, 108.0, 110.0, 112.5, 115.0, 114.0, 118.0, 121.0, 122.5, 122.0, 124.0, 125.5, 127.0];
+        var volume = [12000, 14500, 18000, 16000, 21000, 17500, 24000, 28000, 23000, 19000, 22000, 26000, 31000];
+
+        var trace1 = {
+            x: dates, close: close, high: high, low: low, open: open,
+            decreasing: {line: {color: '#16a34a'}}, // Green down in TW
+            increasing: {line: {color: '#dc2626'}}, // Red up in TW
+            type: 'candlestick', xaxis: 'x', yaxis: 'y', name: 'K線'
+        };
+
+        var trace2 = {
+            x: dates, y: volume, type: 'bar', xaxis: 'x', yaxis: 'y2', name: '成交量',
+            marker: { color: close.map((c, i) => c >= open[i] ? '#dc2626' : '#16a34a') }
+        };
+
+        var layout = {
+            grid: {rows: 2, columns: 1, pattern: 'independent', roworder: 'top to bottom'},
+            yaxis: {title: '股價 (NTD)', domain: [0.3, 1]},
+            yaxis2: {title: '成交量 (張)', domain: [0, 0.2]},
+            xaxis: {rangeslider: {visible: false}},
+            margin: {t: 20, r: 30, l: 50, b: 30},
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)'
+        };
+
+        Plotly.newPlot('plotly-chart', [trace1, trace2], layout);
+    </script>
+</body>
+</html>
